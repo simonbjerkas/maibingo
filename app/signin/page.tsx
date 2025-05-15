@@ -33,7 +33,7 @@ export default function SignIn() {
               Velkommen!
             </CardTitle>
             <CardDescription className="text-gray-600">
-              Logg inn for å fortsette din reise
+              Logg inn for å spille bingo
             </CardDescription>
           </CardHeader>
 

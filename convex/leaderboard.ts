@@ -16,6 +16,7 @@ export const getLeaderboard = query({
         return {
           ...entry,
           userName: user?.name || "Unknown",
+          userImage: user?.image || "",
           position: index + 1,
         };
       }),
@@ -45,6 +46,7 @@ export const getUserLeaderboard = query({
 
     return {
       ...userEntry,
+      userImage: user?.image || "",
       userName: user?.name || "Unknown",
       position,
     };

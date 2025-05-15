@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
@@ -32,6 +33,15 @@ export default function LeaderboardPage() {
                     <span className="text-sm font-medium text-gray-600">
                       #{entry.position}
                     </span>
+                    <Avatar>
+                      <AvatarImage src={entry.userImage} />
+                      <AvatarFallback>
+                        {entry.userName
+                          .split(" ")
+                          .map((name) => name[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
                     <span className="text-sm font-medium">
                       {entry.userName}
                     </span>

@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Leaderboard() {
   const leaderboard = useQuery(api.leaderboard.getLeaderboard);
@@ -66,6 +67,15 @@ export function Leaderboard() {
             <span className="text-sm font-medium text-gray-600">
               #{entry.position}
             </span>
+            <Avatar>
+              <AvatarImage src={entry.userImage} />
+              <AvatarFallback>
+                {entry.userName
+                  .split(" ")
+                  .map((name) => name[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
             <span className="text-sm font-medium">{entry.userName}</span>
           </div>
           <span className="text-sm font-medium text-red-600">
