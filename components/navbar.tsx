@@ -6,6 +6,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
@@ -13,6 +14,7 @@ import { MembersList } from "@/components/memberslist";
 import { SignOutButton } from "@/components/signout";
 import { useState } from "react";
 import Link from "next/link";
+
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -57,8 +59,11 @@ export function Navbar() {
                       Konkurrenter
                     </SheetTitle>
                   </SheetHeader>
+                  <SheetDescription className="sr-only">
+                    Navigasjonsmenu.
+                  </SheetDescription>
                   <div className="space-y-6">
-                    <MembersList />
+                    <MembersList onOpenChange={setIsMenuOpen} />
                     <div className="pt-4 border-t border-gray-200">
                       <SignOutButton />
                     </div>
