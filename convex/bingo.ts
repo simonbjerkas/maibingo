@@ -9,7 +9,7 @@ export const getBingo = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("Unauthorized");
+      return null;
     }
     const bingo = await ctx.db
       .query("bingos")

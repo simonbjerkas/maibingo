@@ -27,16 +27,26 @@ export function Navbar() {
       </div>
 
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/40 backdrop-blur-md border-b border-slate-200/50">
+      <header className="container mx-auto sticky top-0 z-50 bg-white/40 backdrop-blur-md border-b border-slate-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <nav className="flex items-center justify-between w-full">
               <Link href="/">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
                   Bingo
                 </h1>
               </Link>
-            </div>
+              <div className="hidden md:flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  className="text-gray-600 hover:text-red-600 hover:bg-red-50"
+                  asChild
+                >
+                  <Link href="/leaderboard">Ledetabell</Link>
+                </Button>
+                <SignOutButton />
+              </div>
+            </nav>
 
             {/* Mobile menu button */}
             <div className="md:hidden">

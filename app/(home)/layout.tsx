@@ -12,7 +12,7 @@ export default function HomeLayout({
   return (
     <>
       <Navbar />
-      <main className="relative w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+      <main className="container relative w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Sidebar - hidden on mobile, shown on desktop */}
           <aside className="hidden md:block">
