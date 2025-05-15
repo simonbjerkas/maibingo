@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Bingo",
   description: "17. mai 2025",
   icons: {
-    icon: "/convex.svg",
+    icon: "/norway.svg",
   },
 };
 
