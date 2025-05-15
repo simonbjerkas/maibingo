@@ -2,12 +2,26 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
 
-// The schema is normally optional, but Convex Auth
-// requires indexes defined on `authTables`.
-// The schema provides more precise TypeScript types.
 export default defineSchema({
   ...authTables,
-  numbers: defineTable({
-    value: v.number(),
+  bingos: defineTable({
+    userId: v.id("users"),
+    items: v.array(
+      v.object({
+        item: v.id("bingoItems"),
+        status: v.boolean(),
+      }),
+    ),
+  }).index("by_user", ["userId"]),
+  bingoItems: defineTable({
+    item: v.string(),
   }),
+  winners: defineTable({
+    userId: v.id("users"),
+    bingoId: v.id("bingos"),
+  }).index("by_user", ["userId"]),
+  leaderboard: defineTable({
+    userId: v.id("users"),
+    points: v.number(),
+  }).index("by_points", ["points"]),
 });

@@ -1,159 +1,167 @@
 "use client";
 
-import { useConvexAuth, useMutation, useQuery } from "convex/react";
-import { api } from "../convex/_generated/api";
-import Link from "next/link";
+import { useState } from "react";
+import { redirect } from "next/navigation";
+import { useConvexAuth, useQuery } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useRouter } from "next/navigation";
+import { api } from "@/convex/_generated/api";
+
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { BingoBoard } from "./bingo-board";
+import { Leaderboard } from "./leaderboard";
+import { Menu, Users, LogOut } from "lucide-react";
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
-    <>
-      <header className="sticky top-0 z-10 bg-background p-4 border-b-2 border-slate-200 dark:border-slate-800 flex flex-row justify-between items-center">
-        Convex + Next.js + Convex Auth
-        <SignOutButton />
+    <div
+      className={cn(
+        "min-h-screen bg-gradient-to-b from-red-50 to-blue-50 transition-all duration-300",
+        isMenuOpen && "blur-xs",
+      )}
+    >
+      {/* Decorative elements */}
+      <div className="sticky inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-1/3 bg-red-100 opacity-20 transform -skew-y-6"></div>
+        <div className="absolute bottom-0 right-0 w-full h-1/3 bg-blue-100 opacity-20 transform skew-y-6"></div>
+      </div>
+
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/40 backdrop-blur-md border-b border-slate-200/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
+                Bingo
+              </h1>
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="w-[280px] bg-white/95 backdrop-blur-xl"
+                >
+                  <SheetHeader className="mb-6">
+                    <SheetTitle className="text-xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
+                      Konkurrenter
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="space-y-6">
+                    <MembersList />
+                    <div className="pt-4 border-t border-gray-200">
+                      <SignOutButton />
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+        </div>
       </header>
-      <main className="p-8 flex flex-col gap-8">
-        <h1 className="text-4xl font-bold text-center">
-          Convex + Next.js + Convex Auth
-        </h1>
-        <Content />
+
+      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Sidebar - hidden on mobile, shown on desktop */}
+          <aside className="hidden md:block">
+            <Card className="sticky top-24 bg-white/90 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Konkurrenter
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MembersList />
+              </CardContent>
+            </Card>
+          </aside>
+
+          {/* Main content */}
+          <div className="md:col-span-3 flex flex-col gap-4">
+            <Card className="bg-white/90 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle>Ledetabell</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Leaderboard />
+              </CardContent>
+            </Card>
+            <Card className="bg-white/90 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle>Bingobrettet ditt!</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BingoBoard />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </main>
-    </>
+    </div>
   );
 }
 
 function SignOutButton() {
   const { isAuthenticated } = useConvexAuth();
   const { signOut } = useAuthActions();
-  const router = useRouter();
+
   return (
     <>
       {isAuthenticated && (
-        <button
-          className="bg-slate-200 dark:bg-slate-800 text-foreground rounded-md px-2 py-1"
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50"
           onClick={() =>
             void signOut().then(() => {
-              router.push("/signin");
+              redirect("/signin");
             })
           }
         >
-          Sign out
-        </button>
+          <LogOut className="h-4 w-4 mr-2" />
+          Logg ut
+        </Button>
       )}
     </>
   );
 }
 
-function Content() {
-  const { viewer, numbers } =
-    useQuery(api.myFunctions.listNumbers, {
-      count: 10,
-    }) ?? {};
-  const addNumber = useMutation(api.myFunctions.addNumber);
+function MembersList() {
+  const members = useQuery(api.users.getAllUsers);
 
-  if (viewer === undefined || numbers === undefined) {
-    return (
-      <div className="mx-auto">
-        <p>loading... (consider a loading skeleton)</p>
-      </div>
-    );
+  if (members === undefined || members === null) {
+    return <div className="text-sm text-gray-500">Laster...</div>;
   }
 
   return (
-    <div className="flex flex-col gap-8 max-w-lg mx-auto">
-      <p>Welcome {viewer ?? "Anonymous"}!</p>
-      <p>
-        Click the button below and open this page in another window - this data
-        is persisted in the Convex cloud database!
-      </p>
-      <p>
-        <button
-          className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
-          onClick={() => {
-            void addNumber({ value: Math.floor(Math.random() * 10) });
-          }}
-        >
-          Add a random number
-        </button>
-      </p>
-      <p>
-        Numbers:{" "}
-        {numbers?.length === 0
-          ? "Click the button!"
-          : (numbers?.join(", ") ?? "...")}
-      </p>
-      <p>
-        Edit{" "}
-        <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
-          convex/myFunctions.ts
-        </code>{" "}
-        to change your backend
-      </p>
-      <p>
-        Edit{" "}
-        <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
-          app/page.tsx
-        </code>{" "}
-        to change your frontend
-      </p>
-      <p>
-        See the{" "}
-        <Link href="/server" className="underline hover:no-underline">
-          /server route
-        </Link>{" "}
-        for an example of loading data in a server component
-      </p>
-      <div className="flex flex-col">
-        <p className="text-lg font-bold">Useful resources:</p>
-        <div className="flex gap-2">
-          <div className="flex flex-col gap-2 w-1/2">
-            <ResourceCard
-              title="Convex docs"
-              description="Read comprehensive documentation for all Convex features."
-              href="https://docs.convex.dev/home"
-            />
-            <ResourceCard
-              title="Stack articles"
-              description="Learn about best practices, use cases, and more from a growing
-            collection of articles, videos, and walkthroughs."
-              href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html"
-            />
-          </div>
-          <div className="flex flex-col gap-2 w-1/2">
-            <ResourceCard
-              title="Templates"
-              description="Browse our collection of templates to get started quickly."
-              href="https://www.convex.dev/templates"
-            />
-            <ResourceCard
-              title="Discord"
-              description="Join our developer community to ask questions, trade tips & tricks,
-            and show off your projects."
-              href="https://www.convex.dev/community"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ResourceCard({
-  title,
-  description,
-  href,
-}: {
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <div className="flex flex-col gap-2 bg-slate-200 dark:bg-slate-800 p-4 rounded-md h-28 overflow-auto">
-      <a href={href} className="text-sm underline hover:no-underline">
-        {title}
-      </a>
-      <p className="text-xs">{description}</p>
-    </div>
+    <ul className="space-y-1 mx-4">
+      {members.map((member) => (
+        <li key={member._id}>
+          <Button variant="outline" className="w-full">
+            <Link href={`/user/${member._id}`}>{member.name}</Link>
+          </Button>
+        </li>
+      ))}
+    </ul>
   );
 }
