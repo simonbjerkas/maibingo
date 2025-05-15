@@ -1,0 +1,73 @@
+"use client";
+
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useParams } from "next/navigation";
+import { Id } from "@/convex/_generated/dataModel";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+export default function UserPage() {
+  const { userId } = useParams();
+  const user = useQuery(api.users.getUser, { userId: userId as Id<"users"> });
+  const bingo = useQuery(api.bingo.getBingo, {
+    userId: userId as Id<"users">,
+  });
+  const leaderboard = useQuery(api.leaderboard.getUserLeaderboard, {
+    userId: userId as Id<"users">,
+  });
+  if (!user) {
+    return <div>Laster...</div>;
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>{"Nåværende Posisjon"}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-600">
+                  #{leaderboard?.position}
+                </span>
+                <span className="text-sm font-medium">
+                  {leaderboard?.userName}
+                </span>
+              </div>
+              <span className="text-sm font-medium text-red-600">
+                {leaderboard?.points} poeng
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Bingo</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
+              {bingo?.items.map((item, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "aspect-square rounded-lg border-2 p-2 flex items-center justify-center text-center transition-all duration-200 cursor-pointer",
+                    item.status
+                      ? "bg-red-50 border-red-200 text-red-600"
+                      : "bg-white border-gray-200 text-gray-600 hover:border-red-200 hover:bg-red-50/50",
+                  )}
+                >
+                  <span className="text-sm font-medium">{item.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

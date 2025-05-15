@@ -3,15 +3,17 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const getBingo = query({
-  args: {},
-  handler: async (ctx) => {
+  args: {
+    userId: v.optional(v.id("users")),
+  },
+  handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw new Error("Unauthorized");
     }
     const bingo = await ctx.db
       .query("bingos")
-      .filter((q) => q.eq(q.field("userId"), userId))
+      .filter((q) => q.eq(q.field("userId"), args.userId || userId))
       .first();
 
     if (!bingo) {

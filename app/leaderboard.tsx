@@ -9,14 +9,14 @@ export function Leaderboard() {
 
   return (
     <div className="space-y-2">
-      {leaderboard.slice(0, 3).map((entry, index) => (
+      {leaderboard.slice(0, 3).map((entry) => (
         <div
           key={entry._id}
           className="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200"
         >
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-600">
-              #{index + 1}
+              #{entry.position}
             </span>
             <span className="text-sm font-medium">{entry.userName}</span>
           </div>

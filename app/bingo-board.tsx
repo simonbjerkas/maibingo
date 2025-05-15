@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function BingoBoard() {
-  const bingo = useQuery(api.bingo.getBingo);
+  const bingo = useQuery(api.bingo.getBingo, {});
   const createBingo = useMutation(api.bingo.createBingo);
   const addItem = useMutation(api.bingo.addItem);
   const updateItem = useMutation(api.bingo.updateItem);
