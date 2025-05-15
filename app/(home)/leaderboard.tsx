@@ -13,12 +13,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+
 export function Leaderboard() {
   const leaderboard = useQuery(api.leaderboard.getLeaderboard);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (leaderboard && leaderboard[0].points === 9) {
+    if (leaderboard && leaderboard[0]?.points === 9) {
       setOpen(true);
     }
   }, [leaderboard]);
@@ -30,6 +31,14 @@ export function Leaderboard() {
         <Skeleton className="w-full h-10" />
         <Skeleton className="w-full h-10" />
       </div>
+    );
+  }
+
+  if (leaderboard.length === 0) {
+    return (
+      <p className="text-gray-600 text-sm">
+        Ingen spillere har begynt å spille ennå.
+      </p>
     );
   }
 

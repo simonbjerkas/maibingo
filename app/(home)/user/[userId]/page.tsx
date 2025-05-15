@@ -30,17 +30,17 @@ export default function UserPage() {
                 <>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-600">
-                      #{leaderboard?.position}
+                      #{leaderboard.position}
                     </span>
                     <span className="text-sm font-medium">
-                      {leaderboard?.userName}
+                      {leaderboard.userName}
                     </span>
                   </div>
                   <span className="text-sm font-medium text-red-600">
-                    {leaderboard?.points} poeng
+                    {leaderboard.points} poeng
                   </span>
                 </>
-              ) : (
+              ) : leaderboard === undefined ? (
                 <>
                   <div className="flex items-center gap-2">
                     <Skeleton className="w-4 h-4" />
@@ -48,6 +48,10 @@ export default function UserPage() {
                   </div>
                   <Skeleton className="w-20 h-4" />
                 </>
+              ) : (
+                <p className="text-gray-600 text-sm">
+                  Absolutt siste plass. Milevis bak alle andre.
+                </p>
               )}
             </div>
           </div>
@@ -61,28 +65,34 @@ export default function UserPage() {
         <CardContent>
           <div className="space-y-6">
             <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
-              {bingo
-                ? bingo?.items.map((item, index) => (
-                    <div
-                      key={index}
-                      className={cn(
-                        "aspect-square rounded-lg border-2 p-2 flex items-center justify-center text-center transition-all duration-200 cursor-pointer",
-                        item.status
-                          ? "bg-red-50 border-red-200 text-red-600"
-                          : "bg-white border-gray-200 text-gray-600 hover:border-red-200 hover:bg-red-50/50",
-                      )}
-                    >
-                      <span className="text-sm font-medium">{item.name}</span>
-                    </div>
-                  ))
-                : Array.from({ length: 9 }, (_, i) => i + 1).map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className={cn(
-                        "aspect-square rounded-lg border-2 p-2 flex items-center justify-center",
-                      )}
-                    />
-                  ))}
+              {bingo ? (
+                bingo.items.map((item, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      "aspect-square rounded-lg border-2 p-2 flex items-center justify-center text-center transition-all duration-200 cursor-pointer",
+                      item.status
+                        ? "bg-red-50 border-red-200 text-red-600"
+                        : "bg-white border-gray-200 text-gray-600 hover:border-red-200 hover:bg-red-50/50",
+                    )}
+                  >
+                    <span className="text-sm font-medium">{item.name}</span>
+                  </div>
+                ))
+              ) : bingo === undefined ? (
+                Array.from({ length: 9 }, (_, i) => i + 1).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className={cn(
+                      "aspect-square rounded-lg border-2 p-2 flex items-center justify-center",
+                    )}
+                  />
+                ))
+              ) : (
+                <p className="text-gray-600 text-sm col-span-3">
+                  Er det mulig? Har ikke en gang laget bingobrett ennå.
+                </p>
+              )}
             </div>
           </div>
         </CardContent>

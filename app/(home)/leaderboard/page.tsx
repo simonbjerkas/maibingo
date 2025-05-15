@@ -16,8 +16,13 @@ export default function LeaderboardPage() {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {leaderboard
-            ? leaderboard.map((entry) => (
+          {leaderboard ? (
+            leaderboard.length === 0 ? (
+              <p className="text-gray-600 text-sm">
+                Ingen spillere har begynt å spille ennå.
+              </p>
+            ) : (
+              leaderboard.map((entry) => (
                 <Link
                   href={`/user/${entry.userId}`}
                   key={entry._id}
@@ -36,18 +41,21 @@ export default function LeaderboardPage() {
                   </span>
                 </Link>
               ))
-            : Array.from({ length: 8 }, (_, i) => i + 1).map((_, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200"
-                >
-                  <div className="flex items-center gap-2">
-                    <Skeleton className="w-4 h-4" />
-                    <Skeleton className="w-44 h-4" />
-                  </div>
-                  <Skeleton className="w-20 h-4" />
+            )
+          ) : (
+            Array.from({ length: 8 }, (_, i) => i + 1).map((_, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200"
+              >
+                <div className="flex items-center gap-2">
+                  <Skeleton className="w-4 h-4" />
+                  <Skeleton className="w-44 h-4" />
                 </div>
-              ))}
+                <Skeleton className="w-20 h-4" />
+              </div>
+            ))
+          )}
         </div>
       </CardContent>
     </Card>
