@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function BingoBoard() {
   const bingo = useQuery(api.bingo.getBingo, {});
@@ -10,7 +11,20 @@ export function BingoBoard() {
   const updateItem = useMutation(api.bingo.updateItem);
 
   if (bingo === undefined) {
-    return <div className="text-gray-500">Laster...</div>;
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-3 gap-2 max-w-md mx-auto">
+          {Array.from({ length: 9 }, (_, i) => i + 1).map((_, index) => (
+            <Skeleton
+              key={index}
+              className={cn(
+                "aspect-square rounded-lg border-2 p-2 flex items-center justify-center",
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (!bingo) {

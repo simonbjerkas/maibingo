@@ -4,6 +4,7 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { Skeleton } from "./ui/skeleton";
 
 export function MembersList({
   onOpenChange,
@@ -13,7 +14,13 @@ export function MembersList({
   const members = useQuery(api.users.getAllUsers);
 
   if (members === undefined || members === null) {
-    return <div className="text-sm text-gray-500">Laster...</div>;
+    return (
+      <div className="space-y-1 mx-4">
+        <Skeleton className="w-full h-10" />
+        <Skeleton className="w-full h-10" />
+        <Skeleton className="w-full h-10" />
+      </div>
+    );
   }
 
   return (

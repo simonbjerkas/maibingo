@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-
+import { Skeleton } from "@/components/ui/skeleton";
 export function Leaderboard() {
   const leaderboard = useQuery(api.leaderboard.getLeaderboard);
   const [open, setOpen] = useState(false);
@@ -24,7 +24,13 @@ export function Leaderboard() {
   }, [leaderboard]);
 
   if (!leaderboard) {
-    return <div className="text-gray-500">Laster...</div>;
+    return (
+      <div className="space-y-2">
+        <Skeleton className="w-full h-10" />
+        <Skeleton className="w-full h-10" />
+        <Skeleton className="w-full h-10" />
+      </div>
+    );
   }
 
   return (
