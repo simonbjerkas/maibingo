@@ -1,42 +1,14 @@
+"use client";
+
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const items = [
-  "Se noen ta selfie m/ flagg",
-  "Se noen justere bunaden sin",
-  "Spise is",
-  "Se noen ta bile av maten",
-  "Gi noen et kompliment",
-  "Hørt nasjonalsangen",
-  "Hilst på noen ute",
-  "Hørt noen snakke om været",
-  "Sett toget",
-  "Deltatt på quiz",
-  "Drikke noe med bobler",
-  "Ta en selfie med noen",
-  "Sett en russ",
-  "Sette i gang en lek",
-  "Ta bilde av noen på frokosten",
-  "Spise kake",
-  "Sett på en sang",
-  "Se noen som har drukket for mye",
-  "Ser en hund med sløyfe/flagg",
-  "Høre en russelåt",
-  "Høre noen snakke om bunad",
-  "Høre noen snakke om Eurovision",
-  "Se noen med solbriller og bunad",
-  "Høre noen si de har drukket for mye",
-  "Vært med på en drikkelek",
-  "Sunget en sang med 17. mai tema",
-];
-
 export function BingoBoard() {
   const bingo = useQuery(api.bingo.getBingo, {});
   const createBingo = useMutation(api.bingo.createBingo);
-  const addItem = useMutation(api.bingo.addItem);
   const updateItem = useMutation(api.bingo.updateItem);
 
   if (bingo === undefined) {
@@ -68,18 +40,6 @@ export function BingoBoard() {
           }}
         >
           Opprett ny bingo
-        </Button>
-
-        <Button
-          variant="outline"
-          className="bg-red-50 hover:bg-red-100 text-red-600 border-red-200"
-          onClick={() => {
-            items.forEach((item) => {
-              void addItem({ item });
-            });
-          }}
-        >
-          Add item
         </Button>
       </div>
     );
