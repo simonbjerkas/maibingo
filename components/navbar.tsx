@@ -64,7 +64,17 @@ export function Navbar() {
                   </SheetDescription>
                   <div className="space-y-6">
                     <MembersList onOpenChange={setIsMenuOpen} />
-                    <div className="pt-4 border-t border-gray-200">
+                    <div className="pt-4 mx-4 border-t border-gray-200">
+                      <Button
+                        asChild
+                        variant="link"
+                        className="mx-4"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Link href="/leaderboard">Ledetabell</Link>
+                      </Button>
+                    </div>
+                    <div className="pt-4 mx-4 border-t border-gray-200">
                       <SignOutButton />
                     </div>
                   </div>
