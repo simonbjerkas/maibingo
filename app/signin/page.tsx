@@ -10,12 +10,9 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { redirect } from "next/navigation";
-import { useState } from "react";
 
 export default function SignIn() {
   const { signIn } = useAuthActions();
-  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 to-blue-50 relative overflow-hidden">
@@ -47,10 +44,6 @@ export default function SignIn() {
               <GoogleIcon className="size-6" />
               Logg inn med Google
             </Button>
-
-            {error && (
-              <p className="text-red-500 text-center text-sm mt-4">{error}</p>
-            )}
           </CardContent>
 
           <CardFooter className="flex justify-center">
