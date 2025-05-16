@@ -42,12 +42,7 @@ export default function SignIn() {
               variant="outline"
               size="lg"
               className="w-full bg-white hover:bg-red-50 border-2 border-red-500 text-red-600 hover:text-red-700 transition-all duration-300 flex items-center justify-center gap-3 py-6 text-lg font-medium"
-              onClick={() =>
-                void signIn("google")
-                  .catch((error) => setError(error.message))
-                  .then(() => redirect("/"))
-              }
-              type="submit"
+              onClick={() => void signIn("google")}
             >
               <GoogleIcon className="size-6" />
               Logg inn med Google
